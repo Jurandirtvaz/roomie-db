@@ -1,9 +1,68 @@
 # roomie-db
 Banco de Dados do Projeto Roomie
 
-# Dicionário de Dados
+## Como Rodar o Projeto
 
-## TABELA: usuario
+Este projeto utiliza **Docker** e **Docker Compose** para subir o banco de dados.
+
+### Pré-requisitos
+* [Docker](https://www.docker.com/) instalado e rodando.
+* [Git](https://www,git-scm.com/) instalado.
+
+### Clonar o Repositório
+Abra o terminal e execute:
+
+```bash
+git clone https://github.com/MocoGroup/roomie-db.git
+cd roomie-db
+```
+
+### Subir o Banco de Dados
+Na pasta raiz do projeto (onde está o arquivo `docker-compose.yml`), execute:
+
+```bash
+docker compose up --build
+```
+
+Aguarde até aparecer a mensagem `database system is ready to accept connections`.
+
+### Credenciais de Acesso (DBeaver / Aplicação)
+Para conectar ferramentas externas (como DBeaver ou PgAdmin).
+
+| Parâmetro | Valor |
+|:---|---:|
+|Host|`localhost`|
+|Porta|`5432`|
+|Database| `roomie_db`|
+|Usuário|`roomie`|
+|Senha|`123456`|
+
+**Atenção:** Se a porta `5432` já estiver em uso na sua máquina, pare o seu Postgres local ou altere a porta no `docker-compose.yml`.
+
+## Cenário de Teste (Povoamento Automático)
+O banco é inicializado automaticamente com um **Cenário de Locação** para facilitar a correção e validação das regras de negócio.
+
+**História:** A estudante **Ana** está negociando o aluguel de uma suíte com o proprietário **Carlos**.
+
+**Dados disponíveis para consulta:**
+- Usuários:
+    - `carlos@roomie.com` (Proprietário)
+    - `ana@ufape.edu.br` (Estudante)
+    - `marcos@ufape.edu.br` (Estudante)
+- Imóveis: 2 imóveis cadastrados em Garanhuns.
+- Chat: Histórico de conversa entre Ana e Carlos.
+- Contrato: Um contrato de locação ativo entre Ana e Carlos.
+
+### Como Parar e Limpar
+Para parar o banco e **remover os dados** (resetar o volume para testar do zero), utilize:
+
+```bash
+docker compose down -v
+```
+O parâmetro `-v` é essencial para apagar o volume de dados antigo caso você tenha feito alterações no schema SQL.
+## Dicionário de Dados
+
+### TABELA: usuario
 **Descrição:** Armazena os dados básicos de todos os usuários do sistema (estudantes e proprietários).
 
 | Atributo | Tipo | Restrições | Descrição |
@@ -16,7 +75,7 @@ Banco de Dados do Projeto Roomie
 
 ---
 
-## TABELA: estudante
+### TABELA: estudante
 **Descrição:** Especialização de usuário, armazena informações específicas de estudantes que buscam moradia.
 
 | Atributo | Tipo | Restrições | Descrição |
@@ -27,7 +86,7 @@ Banco de Dados do Projeto Roomie
 
 ---
 
-## TABELA: telefone
+### TABELA: telefone
 **Descrição:** Armazena os telefones de contato dos usuários (um usuário pode ter múltiplos telefones).
 
 | Atributo | Tipo | Restrições | Descrição |
@@ -38,7 +97,7 @@ Banco de Dados do Projeto Roomie
 
 ---
 
-## TABELA: habito
+### TABELA: habito
 **Descrição:** Armazena informações básicas sobre os hábitos de estudo do estudante.
 
 | Atributo | Tipo | Restrições | Descrição |
@@ -49,7 +108,7 @@ Banco de Dados do Projeto Roomie
 
 ---
 
-## TABELA: estilo_vida
+### TABELA: estilo_vida
 **Descrição:** Armazena os estilos de vida do estudante (relacionamento 1:N com habito - um estudante pode ter múltiplos estilos).
 
 | Atributo | Tipo | Restrições | Descrição |
@@ -60,7 +119,7 @@ Banco de Dados do Projeto Roomie
 
 ---
 
-## TABELA: preferencia_limpeza
+### TABELA: preferencia_limpeza
 **Descrição:** Armazena as preferências de limpeza e organização do estudante (relacionamento 1:N com habito).
 
 | Atributo | Tipo | Restrições | Descrição |
@@ -71,7 +130,7 @@ Banco de Dados do Projeto Roomie
 
 ---
 
-## TABELA: hobby
+### TABELA: hobby
 **Descrição:** Armazena os hobbies e interesses do estudante (relacionamento 1:N com habito - um estudante pode ter múltiplos hobbies).
 
 | Atributo | Tipo | Restrições | Descrição |
@@ -82,7 +141,7 @@ Banco de Dados do Projeto Roomie
 
 ---
 
-## TABELA: imovel
+### TABELA: imovel
 **Descrição:** Cadastro de imóveis disponíveis para locação por estudantes.
 
 | Atributo | Tipo | Restrições | Descrição |
@@ -98,7 +157,7 @@ Banco de Dados do Projeto Roomie
 
 ---
 
-## TABELA: endereco
+### TABELA: endereco
 **Descrição:** Localização completa do imóvel (relação 1:1 com imóvel).
 
 | Atributo    | Tipo | Restrições | Descrição                                                              |
@@ -114,7 +173,7 @@ Banco de Dados do Projeto Roomie
 
 ---
 
-## TABELA: foto_imovel
+### TABELA: imagem_imovel
 **Descrição:** Fotos do imóvel para visualização no anúncio (um imóvel pode ter várias fotos).
 
 | Atributo | Tipo | Restrições | Descrição |
@@ -125,7 +184,7 @@ Banco de Dados do Projeto Roomie
 
 ---
 
-## TABELA: contrato_locacao
+### TABELA: contrato_locacao
 **Descrição:** Registra os contratos de locação firmados entre estudantes e proprietários.
 
 | Atributo | Tipo | Restrições | Descrição |
@@ -139,7 +198,7 @@ Banco de Dados do Projeto Roomie
 
 ---
 
-## TABELA: avaliacao_imovel
+### TABELA: avaliacao_imovel
 **Descrição:** Avaliações e comentários de estudantes sobre imóveis onde já moraram ou visitaram.
 
 | Atributo | Tipo | Restrições | Descrição |
@@ -153,7 +212,7 @@ Banco de Dados do Projeto Roomie
 
 ---
 
-## TABELA: chat
+### TABELA: chat
 **Descrição:** Conversas entre estudantes e proprietários sobre um imóvel específico.
 
 | Atributo | Tipo | Restrições | Descrição |
@@ -166,7 +225,7 @@ Banco de Dados do Projeto Roomie
 
 ---
 
-## TABELA: mensagem
+### TABELA: mensagem
 **Descrição:** Mensagens trocadas dentro de cada chat.
 
 | Atributo | Tipo | Restrições | Descrição |
