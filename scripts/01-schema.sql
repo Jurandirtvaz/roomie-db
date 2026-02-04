@@ -1,9 +1,11 @@
+CREATE TYPE tipo_genero AS ENUM ('Masculino', 'Feminino', 'Outro');
+
 CREATE TABLE usuario(
     id_usuario SERIAL PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     senha VARCHAR(255) NOT NULL,
-    genero VARCHAR(20)
+    genero tipo_genero
 );
 
 CREATE TABLE estudante(
@@ -28,19 +30,45 @@ CREATE TABLE telefone(
         REFERENCES usuario(id_usuario)
         ON DELETE CASCADE
 );
-
+CREATE TYPE horarios AS ENUM ('Manhã', 'Tarde', 'Noite', 'Madrugada')
 CREATE TABLE habito(
     id_habito SERIAL PRIMARY KEY,
     id_estudante INT NOT NULL,
-    horario_estudo VARCHAR(100),
-    estilo_vida VARCHAR(100),
-    preferencia_limpeza VARCHAR(100),
-    hobbies TEXT,
-
+    horario_estudo horarios,
     CONSTRAINT fk_habito_estudante
         FOREIGN KEY (id_estudante) 
         REFERENCES estudante(id_estudante)
         ON DELETE CASCADE
+);
+
+CREATE TABLE estilo_vida(
+    id_estilo SERIAL PRIMARY KEY,
+    id_habito INT NOT NULL,
+    estilo VARCHAR(100) NOT NULL,
+    CONSTRAINT fk_estilo_habito
+        FOREIGN KEY (id_habito)
+            REFERENCES habito(id_habito)
+            ON DELETE CASCADE
+);
+
+CREATE TABLE preferencia_limpeza(
+    id_preferencia SERIAL PRIMARY KEY,
+    id_habito INT NOT NULL,
+    preferencia VARCHAR(100) NOT NULL,
+    CONSTRAINT fk_preferencia_habito
+        FOREIGN KEY (id_preferencia)
+            REFERENCES habito(id_habito)
+            ON DELETE CASCADE
+);
+
+CREATE TABLE hobby(
+    id_hobby SERIAL PRIMARY KEY,
+    id_habito INT NOT NULL,
+    hobby VARCHAR(100) NOT NULL,
+    CONSTRAINT fk_hobby_habito
+        FOREIGN KEY (id_habito)
+            REFERENCES habito(id_habito)
+            ON DELETE CASCADE
 );
 
 CREATE TABLE imovel(
@@ -63,6 +91,7 @@ CREATE TABLE endereco (
     id_endereco SERIAL PRIMARY KEY,
     id_imovel INT NOT NULL UNIQUE,
     rua VARCHAR(100) NOT NULL,
+    bairro VARCHAR(100) NOT NULL,
     numero VARCHAR(10) NOT NULL,
     cidade VARCHAR(50) NOT NULL,
     estado VARCHAR(50) NOT NULL,
@@ -101,7 +130,9 @@ CREATE TABLE contrato_locacao(
     CONSTRAINT fk_contrato_estudante
         FOREIGN KEY (id_estudante) 
         REFERENCES estudante(id_estudante)
-        ON DELETE CASCADE
+        ON DELETE CASCADE,
+
+    CONSTRAINT ck_datas_validas CHECK (data_fim > data_inicio)
 );
 
 CREATE TABLE avaliacao_imovel(
