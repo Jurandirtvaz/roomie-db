@@ -15,9 +15,19 @@ INSERT INTO telefone (id_usuario, numero) VALUES
 (2, '(87) 99999-0002'),
 (3, '(87) 99999-0003');
 
-INSERT INTO habito (id_estudante, horario_estudo, estilo_vida, preferencia_limpeza, hobbies) VALUES
-(2, 'Noite', 'Calmo', 'Alto', 'Programação e leitura'),
-(3, 'Dia', 'Agitado', 'Médio', 'Esportes e música');
+INSERT INTO habito (id_estudante, horario_estudo) VALUES
+(2, 'Noite');
+
+INSERT INTO estilo_vida (id_habito, estilo) VALUES (1, 'Calmo');
+INSERT INTO preferencia_limpeza (id_habito, preferencia) VALUES (1, 'Alta');
+INSERT INTO hobby (id_habito, hobby) VALUES (1, 'Programação'), (1, 'Leitura');
+
+INSERT INTO habito (id_estudante, horario_estudo) VALUES
+(3, 'Manhã');
+
+INSERT INTO estilo_vida (id_habito, estilo) VALUES (2, 'Agitado');
+INSERT INTO preferencia_limpeza (id_habito, preferencia) VALUES (2, 'Média');
+INSERT INTO hobby (id_habito, hobby) VALUES (2, 'Futebol'), (2, 'Videogame');
 
 INSERT INTO imovel (id_proprietario, titulo, descricao, tipo, preco, genero_moradores, aceita_animais) VALUES
 (1, 'Suíte confortável próximo à UFAPE', 'Quarto com banheiro privativo, internet inclusa.', 'Quarto', 600.00, 'Feminino', TRUE),
@@ -27,7 +37,7 @@ INSERT INTO endereco (id_imovel, rua, bairro, numero, cidade, estado, cep) VALUE
 (1, 'Rua Deocleciano Soares da Rocha', 'Boa Vista', '123', 'Garanhuns', 'Pernambuco', '55292-760'),
 (2, 'Rua Luís Gama', 'Aluísio', '32', 'Garanhuns', 'Pernambuco', '55292-045');
 
-INSERT INTO foto_imovel (id_imovel, caminho_imagem) VALUES
+INSERT INTO imagem_imovel (id_imovel, caminho_imagem) VALUES
 (1, '/imagens/quartos/suite_01.jpg'),
 (1, '/imagens/quartos/suite_02.jpg'),
 (2, '/imagens/casas/frente_casa.jpg');

@@ -30,7 +30,9 @@ CREATE TABLE telefone(
         REFERENCES usuario(id_usuario)
         ON DELETE CASCADE
 );
-CREATE TYPE horarios AS ENUM ('Manhã', 'Tarde', 'Noite', 'Madrugada')
+
+CREATE TYPE horarios AS ENUM ('Manhã', 'Tarde', 'Noite', 'Madrugada');
+
 CREATE TABLE habito(
     id_habito SERIAL PRIMARY KEY,
     id_estudante INT NOT NULL,
@@ -56,7 +58,7 @@ CREATE TABLE preferencia_limpeza(
     id_habito INT NOT NULL,
     preferencia VARCHAR(100) NOT NULL,
     CONSTRAINT fk_preferencia_habito
-        FOREIGN KEY (id_preferencia)
+        FOREIGN KEY (id_habito)
             REFERENCES habito(id_habito)
             ON DELETE CASCADE
 );
@@ -103,12 +105,12 @@ CREATE TABLE endereco (
         ON DELETE CASCADE
 );
 
-CREATE TABLE foto_imovel (
+CREATE TABLE imagem_imovel (
     id_imagem SERIAL PRIMARY KEY,
     id_imovel INT NOT NULL,
     caminho_imagem VARCHAR(255) NOT NULL,
 
-    CONSTRAINT fk_foto_imovel
+    CONSTRAINT fk_imagem_imovel
         FOREIGN KEY (id_imovel) 
         REFERENCES imovel(id_imovel)
         ON DELETE CASCADE
