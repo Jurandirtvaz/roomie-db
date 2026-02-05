@@ -1,15 +1,15 @@
 # roomie-db
 Banco de Dados do Projeto Roomie
 
-## Como Rodar o Projeto
+# Como Rodar o Projeto
 
 Este projeto utiliza **Docker** e **Docker Compose** para subir o banco de dados.
 
-### Pré-requisitos
+## Pré-requisitos
 * [Docker](https://www.docker.com/) instalado e rodando.
 * [Git](https://www,git-scm.com/) instalado.
 
-### Clonar o Repositório
+## Clonar o Repositório
 Abra o terminal e execute:
 
 ```bash
@@ -17,7 +17,7 @@ git clone https://github.com/MocoGroup/roomie-db.git
 cd roomie-db
 ```
 
-### Subir o Banco de Dados
+## Subir o Banco de Dados
 Na pasta raiz do projeto (onde está o arquivo `docker-compose.yml`), execute:
 
 ```bash
@@ -26,18 +26,16 @@ docker compose up --build
 
 Aguarde até aparecer a mensagem `database system is ready to accept connections`.
 
-### Credenciais de Acesso (DBeaver / Aplicação)
+## Credenciais de Acesso (DBeaver / Aplicação)
 Para conectar ferramentas externas (como DBeaver ou PgAdmin).
 
 | Parâmetro | Valor |
 |:---|---:|
 |Host|`localhost`|
-|Porta|`5432`|
+|Porta|`5433`|
 |Database| `roomie_db`|
-|Usuário|`roomie`|
-|Senha|`123456`|
-
-**Atenção:** Se a porta `5432` já estiver em uso na sua máquina, pare o seu Postgres local ou altere a porta no `docker-compose.yml`.
+|Usuário|`[your-user]`|
+|Senha|`[your-password]`|
 
 ## Cenário de Teste (Povoamento Automático)
 O banco é inicializado automaticamente com um **Cenário de Locação** para facilitar a correção e validação das regras de negócio.
@@ -60,9 +58,9 @@ Para parar o banco e **remover os dados** (resetar o volume para testar do zero)
 docker compose down -v
 ```
 O parâmetro `-v` é essencial para apagar o volume de dados antigo caso você tenha feito alterações no schema SQL.
-## Dicionário de Dados
+# Dicionário de Dados
 
-### TABELA: usuario
+## TABELA: usuario
 **Descrição:** Armazena os dados básicos de todos os usuários do sistema (estudantes e proprietários).
 
 | Atributo | Tipo | Restrições | Descrição |
@@ -75,7 +73,7 @@ O parâmetro `-v` é essencial para apagar o volume de dados antigo caso você t
 
 ---
 
-### TABELA: estudante
+## TABELA: estudante
 **Descrição:** Especialização de usuário, armazena informações específicas de estudantes que buscam moradia.
 
 | Atributo | Tipo | Restrições | Descrição |
@@ -86,7 +84,7 @@ O parâmetro `-v` é essencial para apagar o volume de dados antigo caso você t
 
 ---
 
-### TABELA: telefone
+## TABELA: telefone
 **Descrição:** Armazena os telefones de contato dos usuários (um usuário pode ter múltiplos telefones).
 
 | Atributo | Tipo | Restrições | Descrição |
@@ -97,18 +95,18 @@ O parâmetro `-v` é essencial para apagar o volume de dados antigo caso você t
 
 ---
 
-### TABELA: habito
+## TABELA: habito
 **Descrição:** Armazena informações básicas sobre os hábitos de estudo do estudante.
 
 | Atributo | Tipo | Restrições | Descrição |
 |----------|------|------------|-----------|
 | id_habito | SERIAL | PRIMARY KEY | Identificador único do registro de hábitos |
 | id_estudante | INT | FOREIGN KEY → estudante(id_estudante), NOT NULL, ON DELETE CASCADE | Estudante ao qual os hábitos pertencem |
-| horario_estudo | VARCHAR(100) | - | Período preferencial de estudo (ex: Manhã, Tarde, Noite, Madrugada) |
+| horario_estudo | horarios | ENUM('Manhã', 'Tarde', 'Noite', 'Madrugada') | Período preferencial de estudo |
 
 ---
 
-### TABELA: estilo_vida
+## TABELA: estilo_vida
 **Descrição:** Armazena os estilos de vida do estudante (relacionamento 1:N com habito - um estudante pode ter múltiplos estilos).
 
 | Atributo | Tipo | Restrições | Descrição |
@@ -119,7 +117,7 @@ O parâmetro `-v` é essencial para apagar o volume de dados antigo caso você t
 
 ---
 
-### TABELA: preferencia_limpeza
+## TABELA: preferencia_limpeza
 **Descrição:** Armazena as preferências de limpeza e organização do estudante (relacionamento 1:N com habito).
 
 | Atributo | Tipo | Restrições | Descrição |
@@ -130,7 +128,7 @@ O parâmetro `-v` é essencial para apagar o volume de dados antigo caso você t
 
 ---
 
-### TABELA: hobby
+## TABELA: hobby
 **Descrição:** Armazena os hobbies e interesses do estudante (relacionamento 1:N com habito - um estudante pode ter múltiplos hobbies).
 
 | Atributo | Tipo | Restrições | Descrição |
@@ -141,7 +139,7 @@ O parâmetro `-v` é essencial para apagar o volume de dados antigo caso você t
 
 ---
 
-### TABELA: imovel
+## TABELA: imovel
 **Descrição:** Cadastro de imóveis disponíveis para locação por estudantes.
 
 | Atributo | Tipo | Restrições | Descrição |
@@ -157,34 +155,34 @@ O parâmetro `-v` é essencial para apagar o volume de dados antigo caso você t
 
 ---
 
-### TABELA: endereco
+## TABELA: endereco
 **Descrição:** Localização completa do imóvel (relação 1:1 com imóvel).
-
-| Atributo    | Tipo | Restrições | Descrição                                                              |
-|-------------|------|------------|------------------------------------------------------------------------|
-| id_endereco | SERIAL | PRIMARY KEY | Identificador único do endereço                                        |
-| id_imovel   | INT | FOREIGN KEY → imovel(id_imovel), NOT NULL, UNIQUE, ON DELETE CASCADE | Imóvel ao qual o endereço pertence (cada imóvel tem um único endereço) |
-| rua         | VARCHAR(100) | NOT NULL | Nome da rua                                                            |
-| bairro      | VARCHAR(100) | NOT NULL | Nome do bairro                                                         |
-| numero      | VARCHAR(10) | NOT NULL | Número do imóvel                                                       |
-| cidade      | VARCHAR(50) | NOT NULL | Cidade onde o imóvel está localizado                                   |
-| estado      | VARCHAR(50) | NOT NULL | Estado (UF)                                                            |
-| cep         | VARCHAR(20) | NOT NULL | Código de Endereçamento Postal                                         |
-
----
-
-### TABELA: imagem_imovel
-**Descrição:** Fotos do imóvel para visualização no anúncio (um imóvel pode ter várias fotos).
 
 | Atributo | Tipo | Restrições | Descrição |
 |----------|------|------------|-----------|
-| id_imagem | SERIAL | PRIMARY KEY | Identificador único da foto |
-| id_imovel | INT | FOREIGN KEY → imovel(id_imovel), NOT NULL, ON DELETE CASCADE | Imóvel ao qual a foto pertence |
+| id_endereco | SERIAL | PRIMARY KEY | Identificador único do endereço |
+| id_imovel | INT | FOREIGN KEY → imovel(id_imovel), NOT NULL, UNIQUE, ON DELETE CASCADE | Imóvel ao qual o endereço pertence (cada imóvel tem um único endereço) |
+| rua | VARCHAR(100) | NOT NULL | Nome da rua |
+| bairro | VARCHAR(100) | NOT NULL | Nome do bairro |
+| numero | VARCHAR(10) | NOT NULL | Número do imóvel |
+| cidade | VARCHAR(50) | NOT NULL | Cidade onde o imóvel está localizado |
+| estado | VARCHAR(50) | NOT NULL | Estado (UF) |
+| cep | VARCHAR(20) | NOT NULL | Código de Endereçamento Postal |
+
+---
+
+## TABELA: imagem_imovel
+**Descrição:** Imagens do imóvel para visualização no anúncio (um imóvel pode ter várias imagens).
+
+| Atributo | Tipo | Restrições | Descrição |
+|----------|------|------------|-----------|
+| id_imagem | SERIAL | PRIMARY KEY | Identificador único da imagem |
+| id_imovel | INT | FOREIGN KEY → imovel(id_imovel), NOT NULL, ON DELETE CASCADE | Imóvel ao qual a imagem pertence |
 | caminho_imagem | VARCHAR(255) | NOT NULL | Caminho/URL da imagem no servidor |
 
 ---
 
-### TABELA: contrato_locacao
+## TABELA: contrato_locacao
 **Descrição:** Registra os contratos de locação firmados entre estudantes e proprietários.
 
 | Atributo | Tipo | Restrições | Descrição |
@@ -192,13 +190,15 @@ O parâmetro `-v` é essencial para apagar o volume de dados antigo caso você t
 | id_contrato | SERIAL | PRIMARY KEY | Identificador único do contrato |
 | id_imovel | INT | FOREIGN KEY → imovel(id_imovel), NOT NULL, ON DELETE CASCADE | Imóvel objeto do contrato |
 | id_estudante | INT | FOREIGN KEY → estudante(id_estudante), NOT NULL, ON DELETE CASCADE | Estudante locatário |
+| id_proprietario | INT | FOREIGN KEY → usuario(id_usuario), NOT NULL, ON DELETE CASCADE | Proprietário do imóvel |
 | data_inicio | DATE | NOT NULL, CHECK (data_fim > data_inicio) | Data de início da locação |
 | data_fim | DATE | NOT NULL | Data de término da locação |
 | valor_aluguel | DECIMAL(10,2) | NOT NULL | Valor mensal acordado no contrato |
+| status_contrato | status_contrato | ENUM('Ativo', 'Encerrado', 'Cancelado'), NOT NULL | Status atual do contrato |
 
 ---
 
-### TABELA: avaliacao_imovel
+## TABELA: avaliacao_imovel
 **Descrição:** Avaliações e comentários de estudantes sobre imóveis onde já moraram ou visitaram.
 
 | Atributo | Tipo | Restrições | Descrição |
@@ -212,7 +212,7 @@ O parâmetro `-v` é essencial para apagar o volume de dados antigo caso você t
 
 ---
 
-### TABELA: chat
+## TABELA: chat
 **Descrição:** Conversas entre estudantes e proprietários sobre um imóvel específico.
 
 | Atributo | Tipo | Restrições | Descrição |
@@ -225,7 +225,7 @@ O parâmetro `-v` é essencial para apagar o volume de dados antigo caso você t
 
 ---
 
-### TABELA: mensagem
+## TABELA: mensagem
 **Descrição:** Mensagens trocadas dentro de cada chat.
 
 | Atributo | Tipo | Restrições | Descrição |
@@ -235,3 +235,4 @@ O parâmetro `-v` é essencial para apagar o volume de dados antigo caso você t
 | id_remetente | INT | FOREIGN KEY → usuario(id_usuario), NOT NULL, ON DELETE CASCADE | Usuário que enviou a mensagem |
 | conteudo | TEXT | NOT NULL | Conteúdo textual da mensagem |
 | timestamp_mensagem | TIMESTAMP | DEFAULT CURRENT_TIMESTAMP | Data e hora de envio da mensagem |
+| lida | BOOLEAN | DEFAULT FALSE | Indica se a mensagem foi lida pelo destinatário |

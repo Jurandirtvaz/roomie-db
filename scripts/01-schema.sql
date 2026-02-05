@@ -1,4 +1,5 @@
 CREATE TYPE tipo_genero AS ENUM ('Masculino', 'Feminino', 'Outro');
+CREATE TYPE status_contrato AS ENUM ('Ativo', 'Encerrado', 'Cancelado');
 
 CREATE TABLE usuario(
     id_usuario SERIAL PRIMARY KEY,
@@ -120,9 +121,11 @@ CREATE TABLE contrato_locacao(
     id_contrato SERIAL PRIMARY KEY,
     id_imovel INT NOT NULL,
     id_estudante INT NOT NULL,
+    id_proprietario INT NOT NULL,
     data_inicio DATE NOT NULL,
     data_fim DATE NOT NULL,
     valor_aluguel DECIMAL(10, 2) NOT NULL,
+    status_contrato status_contrato NOT NULL,
 
     CONSTRAINT fk_contrato_imovel
         FOREIGN KEY (id_imovel) 
@@ -134,7 +137,12 @@ CREATE TABLE contrato_locacao(
         REFERENCES estudante(id_estudante)
         ON DELETE CASCADE,
 
-    CONSTRAINT ck_datas_validas CHECK (data_fim > data_inicio)
+    CONSTRAINT ck_datas_validas CHECK (data_fim > data_inicio),
+    
+    CONSTRAINT fk_contrato_proprietario
+        FOREIGN KEY (id_proprietario) 
+        REFERENCES usuario(id_usuario)
+        ON DELETE CASCADE
 );
 
 CREATE TABLE avaliacao_imovel(
@@ -185,6 +193,7 @@ CREATE TABLE mensagem(
     id_remetente INT NOT NULL,
     conteudo TEXT NOT NULL,
     timestamp_mensagem TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    lida BOOLEAN DEFAULT FALSE,
 
     CONSTRAINT fk_mensagem_chat
         FOREIGN KEY (id_chat)
