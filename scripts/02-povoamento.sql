@@ -3,7 +3,7 @@ INSERT INTO usuario (nome, email, cpf, senha, genero) VALUES
 ('Ana Estudante', 'ana@ufape.edu.br', '21426363060', '$2a$10$N.zmdr9k7uOCQb376NoUnutj8iAt6aBECYnzhO99ZjYd5x7of5w0m', 'FEMININO'),
 ('Marcos Calouro', 'marcos@ufape.edu.br', '62132436070', '$2a$10$N.zmdr9k7uOCQb376NoUnutj8iAt6aBECYnzhO99ZjYd5x7of5w0m', 'MASCULINO');
 
-INSERT INTO estudante (id_estudante, curso, instituicao) VALUES
+INSERT INTO estudante (id_estudante, curso, instituicstao) VALUES
 (2, 'Ciência da Computação', 'UFAPE'),
 (3, 'Agronomia', 'UFAPE');
 
