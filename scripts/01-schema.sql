@@ -1,12 +1,14 @@
 CREATE TYPE tipo_genero AS ENUM ('Masculino', 'Feminino', 'Outro');
 CREATE TYPE status_contrato AS ENUM ('Ativo', 'Encerrado', 'Cancelado');
+CREATE TYPE user_role AS ENUM ('ADMIN', 'USER');
 
 CREATE TABLE usuario(
     id_usuario SERIAL PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     senha VARCHAR(255) NOT NULL,
-    genero tipo_genero
+    genero tipo_genero,
+    cargo user_role NOT NULL DEFAULT 'USER'
 );
 
 CREATE TABLE estudante(
