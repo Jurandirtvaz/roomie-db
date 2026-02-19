@@ -1,7 +1,9 @@
-CREATE TYPE horarios AS ENUM ('MANHÃ', 'TARDE', 'NOITE', 'MADRUGADA');
-CREATE TYPE tipo_genero AS ENUM ('MASCULINO', 'FEMININO', 'OUTRO');
-CREATE TYPE status_contrato AS ENUM ('ATIVO', 'ENCERRADO', 'CANCELADO'); 
+CREATE TYPE horarios AS ENUM ('MORNING', 'AFTERNOON', 'EVENING', 'DAWN');
+CREATE TYPE tipo_genero AS ENUM ('MALE', 'FEMALE', 'OTHER', 'MIXED');
+CREATE TYPE status_contrato AS ENUM ('ATIVO', 'FINISHED', 'CANCELLED'); 
 CREATE TYPE user_role AS ENUM ('ADMIN', 'USER');
+CREATE TYPE tipo_imovel AS ENUM ('HOUSE', 'APARTMENT', 'STUDIO', 'ROOM', 'DOMITORY')
+CREATE TYPE status_anuncio AS ENUM ('DRAFT', 'ACTIVE', 'RENTED')
 
 CREATE TABLE usuario(
     id_usuario SERIAL PRIMARY KEY,
@@ -82,10 +84,12 @@ CREATE TABLE imovel(
     id_proprietario INT NOT NULL,
     titulo VARCHAR(100) NOT NULL,
     descricao TEXT,
-    tipo VARCHAR(50) NOT NULL,
+    tipo tipo_imovel NOT NULL,
     preco DECIMAL(10, 2) NOT NULL,
-    genero_moradores VARCHAR(20),
+    genero_moradores tipo_genero NOT NULL,
     aceita_animais BOOLEAN DEFAULT FALSE,
+    vagas_disponiveis INT NOT NULL DEFAULT 1,
+    status status_anuncio NOT NULL DEFAULT 'DRAFT',  
 
     CONSTRAINT fk_imovel_proprietario
         FOREIGN KEY (id_proprietario) 
